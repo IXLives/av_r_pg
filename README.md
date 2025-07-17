@@ -12,27 +12,31 @@ A WebXR-compatible VR action RPG prototype inspired by Path of Exile, built with
 
 ## Features
 
-### Current Implementation (Phase 1 ✅ + Phase 2 🚧)
+### Current Implementation (Phase 1 ✅ + Phase 2 ✅)
 - ✅ WebXR VR session support
 - ✅ Isometric/top-down camera perspective
 - ✅ Basic 3D environment (floor, lighting, grid)
 - ✅ **Player character system** with smooth movement
 - ✅ **Click-to-move mechanics** (click floor to move character)
+- ✅ **VR controller support** (dual thumbstick controls)
+- ✅ **Left controller** → direct character movement
+- ✅ **Right controller** → cursor/reticle movement + targeting
+- ✅ **VR trigger actions** (move to cursor, spell casting ready)
 - ✅ **Character rotation** (faces movement direction)
 - ✅ **Movement state management** (Zustand store)
-- ✅ **Visual movement feedback** (target indicator ring)
+- ✅ **Visual movement feedback** (target indicator rings)
 - ✅ VR mode detection and setup
 - ✅ Shadow casting and receiving
 
 ### Planned Features (Next Phases)
-- 🔄 **VR controller support** (left: move character, right: cursor/targeting)
-- 🔄 **VR hand tracking integration**
+- 🔄 **Combat system** with spell casting and projectiles
+- 🔄 **Monster spawning** and basic AI
+- 🔄 **Health/Mana system** and character stats
+- 🔄 **Experience and leveling** mechanics
+- 🔄 **Inventory system** with VR-friendly UI
+- 🔄 **Passive skill tree** (Path of Exile style)
 - 🔄 **Improved movement bounds** and collision detection
-- 🔄 Monster spawning and AI
-- 🔄 Combat system with spell casting
-- 🔄 Inventory system
-- 🔄 Character leveling and stats
-- 🔄 Passive skill tree (Path of Exile style)
+- 🔄 **Hand tracking integration** (Quest native support)
 
 ## Getting Started
 
@@ -67,7 +71,9 @@ src/
 ├── components/
 │   ├── XRScene.tsx          # Main 3D environment component
 │   ├── Player.tsx           # Player character with movement logic
-│   └── ClickToMove.tsx      # Click-to-move interaction system
+│   ├── ClickToMove.tsx      # Click-to-move interaction system
+│   ├── VRControls.tsx       # VR controller input handling
+│   └── VRCursor.tsx         # VR cursor/reticle system
 ├── stores/
 │   └── gameStore.ts         # Zustand state management for game data
 ├── App.tsx                  # XR session initialization and canvas setup
@@ -81,11 +87,13 @@ src/
 - **App**: Initializes XR store and canvas
 - **XRScene**: Main 3D environment (floor, lighting, camera)
 - **Player**: Character logic, movement, and visual representation
-- **ClickToMove**: Click-to-move interaction system
+- **ClickToMove**: Click-to-move interaction system (desktop/VR)
+- **VRControls**: VR controller input handling and movement
+- **VRCursor**: VR cursor/reticle system for targeting
 - *Future components*:
-  - VRControls: Input handling for VR controllers
-  - Reticle: VR cursor/targeting system
   - Combat: Spell casting and damage systems
+  - Monster: Enemy AI and behaviors
+  - Inventory: VR-friendly item management
 
 ### Design Principles
 - Modular, testable React components
@@ -97,20 +105,37 @@ src/
 
 ### Movement System
 - **Click-to-Move**: Click anywhere on the floor to move your character
+- **VR Thumbstick Movement**: Left controller thumbstick for direct character control
 - **Smooth Movement**: Character smoothly interpolates to target position
 - **Smart Rotation**: Character automatically faces movement direction
 - **Movement Bounds**: Movement is constrained to the playable area
 - **Visual Feedback**: Green ring shows movement target location
 - **Idle Animation**: Subtle bobbing when character is stationary
 
+### VR Controller System
+- **Left Controller**: Character movement via thumbstick
+- **Right Controller**: Cursor/reticle movement and targeting
+- **Trigger Actions**: Right trigger moves character to cursor position
+- **Visual Feedback**: Color-coded cursors (green=idle, red=targeting)
+- **Deadzone Handling**: Prevents unintentional input from small movements
+- **Button Detection**: Ready for spell casting and interaction systems
+
 ### Character System
 - **Multi-part Character**: Body, head, and directional indicator
 - **State Management**: Position, rotation, and movement state via Zustand
 - **Movement Physics**: Configurable speed and rotation interpolation
 
-## Controls (Current)
-- **Desktop**: Click on floor to move character
-- **VR Preview**: Same click-to-move (VR controller support coming next)
+## Controls
+
+### Desktop Mode
+- **Mouse**: Click on floor to move character
+- **VR Button**: Click to enter VR mode when headset is connected
+
+### VR Mode (Quest/PCVR)
+- **Left Thumbstick**: Move character directly
+- **Right Thumbstick**: Move cursor/reticle around the scene
+- **Right Trigger**: Move character to cursor position
+- **Buttons**: Ready for spell casting and interactions (logged to console)
 
 ---
 

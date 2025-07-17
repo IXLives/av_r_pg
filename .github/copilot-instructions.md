@@ -25,13 +25,13 @@ This is a WebXR VR action RPG prototype inspired by Path of Exile. The project u
 - App: XR session initialization
 - XRScene: Main 3D environment (floor, lighting, camera)
 
-### Movement & Controls (Phase 2 - NEXT)
+### Movement & Controls (Phase 2 - COMPLETED)
 - Player: Character representation with movement
 - VRControls: Dual thumbstick + cursor movement system
-- Reticle/Cursor: VR interaction pointer
-- Movement: Click/drag to move, gamepad controls
+- VRCursor: VR interaction pointer and targeting
+- ClickToMove: Click/drag movement system
 
-### Combat System (Phase 3)
+### Combat System (Phase 3 - NEXT)
 - SkillSystem: Active abilities and spell casting
 - CombatManager: Damage calculation, effects
 - Monster: Enemy AI and behaviors

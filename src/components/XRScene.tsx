@@ -2,6 +2,8 @@ import { useFrame } from '@react-three/fiber'
 import { useXR } from '@react-three/xr'
 import Player from './Player'
 import ClickToMove from './ClickToMove'
+import VRControls from './VRControls'
+import VRCursor from './VRCursor'
 import * as THREE from 'three'
 
 export default function XRScene() {
@@ -65,6 +67,13 @@ export default function XRScene() {
       {/* CLICK-TO-MOVE SYSTEM */}
       {/* Invisible clickable floor for movement targeting */}
       <ClickToMove />
+
+      {/* VR CONTROLLER SYSTEMS */}
+      {/* VR controller input handling */}
+      <VRControls />
+      
+      {/* VR cursor/reticle for right controller */}
+      <VRCursor />
 
       {/* VR-SPECIFIC ELEMENTS */}
       {/* Only show certain elements when in VR mode */}
