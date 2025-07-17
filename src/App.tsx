@@ -1,16 +1,13 @@
-import { VRButton, XR, createXRStore } from '@react-three/xr'
+import { VRButton, XR } from '@react-three/xr'
 import { Canvas } from '@react-three/fiber'
 import XRScene from './components/XRScene'
 import './App.css'
 
 function App() {
-  // Create XR store for managing VR session state
-  const store = createXRStore()
-
   return (
     <>
       {/* VR Entry Button - Shows when WebXR is available */}
-      <VRButton store={store} />
+      <VRButton />
       
       {/* Main XR Canvas - handles both 2D preview and VR modes */}
       <Canvas
@@ -21,7 +18,7 @@ function App() {
         }}
       >
         {/* XR Provider enables WebXR functionality */}
-        <XR store={store}>
+        <XR>
           <XRScene />
         </XR>
       </Canvas>
