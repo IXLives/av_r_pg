@@ -2,15 +2,17 @@ import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useXR } from '@react-three/xr'
 import { useGameStore } from '../stores/gameStore'
+import { PlayerCombatSystem } from '../systems/PlayerCombatSystem'
 import * as THREE from 'three'
 
 // VR Controller input handling for movement and cursor control
 export default function VRControls() {
   const xr = useXR()
-  const { player, movePlayerToTarget, stopPlayerMovement } = useGameStore()
+  const { player, ecsWorld, movePlayerToTarget, stopPlayerMovement } = useGameStore()
   
   // Refs for movement state
   const isMovingWithStick = useRef(false)
+  const combatSystemRef = useRef<PlayerCombatSystem | null>(null)
   
   // Controller input constants
   const MOVEMENT_SPEED = 3.0 // Units per second
@@ -81,6 +83,13 @@ export default function VRControls() {
 
       // RIGHT CONTROLLER - Actions and Future Cursor Control
       if (isRightController) {
+        // Get combat system reference
+        if (!combatSystemRef.current) {
+          // Access systems through ECS world
+          const worldSystems = (ecsWorld as unknown as { systems: PlayerCombatSystem[] }).systems
+          combatSystemRef.current = worldSystems.find(s => s instanceof PlayerCombatSystem) || null
+        }
+        
         // Right thumbstick for future cursor movement
         if (axes.length >= 4) {
           const x = axes[2] // Right thumbstick X
@@ -95,19 +104,59 @@ export default function VRControls() {
         
         // Button presses for actions
         if (buttons.length > 0) {
-          // Trigger button for spell casting
-          if (buttons[0]?.pressed) {
-            console.log('Right trigger pressed - ready for spell casting!')
+          // B/Y buttons for attacking
+          if (buttons[4]?.pressed && combatSystemRef.current) { // B button
+            const success = combatSystemRef.current.tryAttack()
+            if (success) {
+              console.log('B button attack!')
+            }
           }
           
-          // Grip button for interactions
-          if (buttons[1]?.pressed) {
-            console.log('Right grip pressed - ready for interactions!')
+          if (buttons[5]?.pressed && combatSystemRef.current) { // Y button  
+            const success = combatSystemRef.current.tryAttack()
+            if (success) {
+              console.log('Y button attack!')
+            }
           }
           
-          // A button (if available)
-          if (buttons[4]?.pressed) {
-            console.log('A button pressed - ready for menu/inventory!')
+          // Grip button for attacks
+          if (buttons[1]?.pressed && combatSystemRef.current) {
+            const success = combatSystemRef.current.tryAttack()
+            if (success) {
+              console.log('Right grip attack!')
+            }
+          }
+        }
+      }
+
+      // LEFT CONTROLLER - Additional combat options
+      if (isLeftController && buttons.length > 0) {
+        // Get combat system reference
+        if (!combatSystemRef.current) {
+          const worldSystems = (ecsWorld as unknown as { systems: PlayerCombatSystem[] }).systems
+          combatSystemRef.current = worldSystems.find(s => s instanceof PlayerCombatSystem) || null
+        }
+
+        // A/X buttons for skills
+        if (buttons[4]?.pressed && combatSystemRef.current) { // A button
+          const success = combatSystemRef.current.tryAttack()
+          if (success) {
+            console.log('A button skill!')
+          }
+        }
+        
+        if (buttons[5]?.pressed && combatSystemRef.current) { // X button
+          const success = combatSystemRef.current.tryAttack()
+          if (success) {
+            console.log('X button skill!')
+          }
+        }
+        
+        // Grip button for skills
+        if (buttons[1]?.pressed && combatSystemRef.current) {
+          const success = combatSystemRef.current.tryAttack()
+          if (success) {
+            console.log('Left grip skill!')
           }
         }
       }

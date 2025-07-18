@@ -17,12 +17,11 @@ export default function ClickToMove() {
       point.z
     )
     
-    // Constrain movement to playable area (within 8 units from center)
-    const maxDistance = 8
-    if (targetPosition.distanceTo(new THREE.Vector3(0, 0.5, 0)) > maxDistance) {
-      const direction = targetPosition.clone().sub(new THREE.Vector3(0, 0.5, 0)).normalize()
-      targetPosition.copy(direction.multiplyScalar(maxDistance).add(new THREE.Vector3(0, 0.5, 0)))
-    }
+    // Constrain movement to playable area (rectangular bounds)
+    const maxX = 9  // Allow movement to edges of the 20x20 plane
+    const maxZ = 9
+    targetPosition.x = Math.max(-maxX, Math.min(maxX, targetPosition.x))
+    targetPosition.z = Math.max(-maxZ, Math.min(maxZ, targetPosition.z))
     
     return targetPosition
   }
