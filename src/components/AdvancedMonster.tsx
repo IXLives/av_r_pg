@@ -76,11 +76,23 @@ export default function AdvancedMonster({
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation()
     
-    if (!entityRef.current) return
+    console.log(`🎯 AdvancedMonster ${entityId} clicked for targeting`)
+    
+    if (!entityRef.current) {
+      console.log(`❌ No entity reference for advanced monster ${entityId}`)
+      return
+    }
+
+    // Check if monster is alive
+    const healthComponent = entityRef.current.getComponent<HealthComponent>('health')
+    if (healthComponent && healthComponent.current <= 0) {
+      console.log(`❌ AdvancedMonster ${entityId} is dead, cannot target`)
+      return
+    }
 
     // Set this monster as the target using the store
     setCurrentTarget(entityRef.current.id)
-    console.log(`Targeted advanced monster: ${entityRef.current.id}`)
+    console.log(`✅ Targeted advanced monster: ${entityRef.current.id}`)
   }
 
   // Initialize monster entity and components
@@ -153,23 +165,34 @@ export default function AdvancedMonster({
       </mesh>
 
       {/* Health Bar */}
-      <group position={[position.x, position.y + (config.scale[1] * 0.8 + 0.5), position.z]}>
+      <group position={[0, config.scale[1] * 0.8 + 0.5, 0]}>
         {/* Background bar */}
         <mesh position={[0, 0, 0]}>
           <planeGeometry args={[1.5, 0.15]} />
           <meshBasicMaterial color="#330000" transparent opacity={0.8} />
         </mesh>
         
-        {/* Health bar (will be updated via ECS) */}
-        <mesh position={[-0.15, 0, 0.01]}>
-          <planeGeometry args={[1.2, 0.1]} />
-          <meshBasicMaterial color="#ff0000" transparent opacity={0.9} />
-        </mesh>
+        {/* Dynamic Health bar */}
+        {entityRef.current && (() => {
+          const healthComponent = entityRef.current.getComponent<HealthComponent>('health')
+          if (healthComponent) {
+            const healthPercent = healthComponent.current / healthComponent.maximum
+            const barWidth = 1.2 * healthPercent
+            const offsetX = (1.2 - barWidth) / 2 - 0.6
+            return (
+              <mesh position={[offsetX, 0, 0.01]}>
+                <planeGeometry args={[barWidth, 0.1]} />
+                <meshBasicMaterial color="#ff0000" transparent opacity={0.9} />
+              </mesh>
+            )
+          }
+          return null
+        })()}
       </group>
 
       {/* Monster type indicator (floating text) */}
       {monsterType !== 'basic' && (
-        <group position={[position.x, position.y + (config.scale[1] * 0.8 + 1.0), position.z]}>
+        <group position={[0, config.scale[1] * 0.8 + 1.0, 0]}>
           <mesh>
             <planeGeometry args={[1, 0.2]} />
             <meshBasicMaterial 

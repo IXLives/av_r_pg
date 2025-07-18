@@ -31,11 +31,15 @@ This is a WebXR VR action RPG prototype inspired by Path of Exile. The project u
 - VRCursor: VR interaction pointer and targeting
 - ClickToMove: Click/drag movement system
 
-### Combat System (Phase 3 - NEXT)
-- SkillSystem: Active abilities and spell casting
+### Combat System (Phase 3 - COMPLETED)
+- SkillSystem: Active abilities and spell casting  
 - CombatManager: Damage calculation, effects
-- Monster: Enemy AI and behaviors
+- Monster: Enemy AI and behaviors with dynamic health bars
 - ProjectileSystem: Ranged attacks and spells
+- PlayerCombatSystem: Player attack logic with range validation
+- MonsterAISystem: Enemy AI with aggression on attack
+- CollisionSystem: Entity collision detection and separation
+- Health/Death System: Player respawn functionality with UI
 
 ### Character Progression (Phase 4)
 - CharacterStats: Level, health, mana, attributes
@@ -48,6 +52,27 @@ This is a WebXR VR action RPG prototype inspired by Path of Exile. The project u
 - LootSystem: Item drops and rewards
 - QuestSystem: Objectives and progression
 - UISystem: VR-friendly menus and HUD
+
+## Recent Updates & Known Issues
+
+### ✅ Recently Fixed
+- Map boundary constraints (rectangular instead of circular)
+- Dynamic health bars for monsters (real-time updates)
+- Monster aggression when attacked
+- Player respawn functionality
+- Collision detection between entities
+- Target switching (can change targets freely)
+- Range calculation (continuous checking)
+- Player death prevention (no attacks when dead)
+
+### 🐛 Current Issues
+- Some monsters may not be targetable (investigating click handlers)
+- Type assertions needed for ECS component access (should be fixed)
+
+### 📝 Documentation
+- COMPLETE_DOCUMENTATION.md: Comprehensive code documentation
+- Copilot instructions updated with current project state
+- ECS architecture fully documented with examples
 
 ## Code Style
 - Use TypeScript for type safety
